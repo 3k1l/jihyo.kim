@@ -13,10 +13,14 @@ int solution(vector<int> people, int limit) {
         curWeight = people[i];
         if(!check[i]) {
             check[i] = true;
-            for(int j = i+1 ; j < people.size(); ++j) {
-                if(people[j] <= limit - curWeight && !check[j]) {
-                    check[j] = true;
+            for(int j = people.size()-1 ; j > i ; --j) {
+                if(check[j])
+                    continue;
+                if(people[j] > (limit - curWeight))
                     break;
+                else { 
+                    check[j] = true;
+                    break;   
                 }
             }
             ++answer;
