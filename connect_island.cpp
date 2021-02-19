@@ -3,50 +3,68 @@
 #include <algorithm>
 #include <iostream>
 using namespace std;
-int parent[100];
 
-bool cmp(vector<int> edge1, vector<int> edge2) {
-    return edge1[2] < edge2[2];
-}
+struct Node {
+    int num;
+    Node* parent;
+    vector<Node*> children;
+    int childrenNum;
+    Node(int _num) : parent(this), childrenNum(0), num(_num) {}
 
-int getParent(int node) {
-    if(node == parent[node])
-        return node;
-    else
-        return getParent(parent[node]);
-}
+    void insert(Node* child) {
+        children.push_back(child);
+        ++childrenNum;
+    }
+};
 
-bool isCycle(vector<int> edge) {
-    int parent1 = getParent(edge[0]);
-    int parent2 = getParent(edge[1]);
-    if(parent1 == parent2)
+bool isCycle(Node* node1, Node* node2) {
+    if(node1->parent == node2->parent)
         return true;
     else
         return false;
 }
-void unionParent(int node1, int node2){
-	node1 = getParent(node1);
-	node2 = getParent(node2);
-	if(node1<node2) {
-        parent[node2] = node1;
-    }
-	else {
-        parent[node1] = node2;
+void setChild(Node* node1, Node* node2) {
+    node2->parent = node1;
+    node1->insert(node2);
+}
+
+Node* getParent(Node* node1) {
+    if(node1->parent->num == node1->num)
+        return node1;
+    else {
+        return getParent(node1->parent);
     }
 }
+
+void makeEdge(Node* node1, Node* node2) {
+    if(getParent(node1) < getParent(node2)) {
+        setChild(node1, node2);
+    }
+    else {
+        setChild(node2, node1);
+    }
+}
+
+bool cmp(vector<int> num1, vector<int> num2) {
+    return num1[2] < num2[2];
+}
+
 int solution(int n, vector<vector<int> > costs) {
     int answer = 0;
-    //initialize parent node
-    for(int i = 0 ; i < n ; ++i) {
-        parent[i] = i;
-    }
+    int idxStart, idxEnd, distance;
     sort(costs.begin(), costs.end(), cmp);
-
+    vector<Node> nodes;
     for(int i = 0 ; i < n ; ++i) {
-        //cout <<costs[i][0]<<costs[i][1]<<costs[i][2]<<"\n";
-        if(!isCycle(costs[i])) {
-            answer += costs[i][2];
-            unionParent(costs[i][0],costs[i][1]);
+        nodes.push_back(Node(i));
+    }
+
+    for(int i = 0 ; i < n; ++i) {
+        idxStart = costs[i][0];
+        idxEnd = costs[i][1];
+        distance = costs[i][2];
+        if(!isCycle(&nodes[idxStart], &nodes[idxEnd])) {
+            makeEdge(&nodes[idxStart], &nodes[idxEnd]);
+            answer += distance;
         }
     }
     return answer;
