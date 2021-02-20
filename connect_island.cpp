@@ -43,7 +43,6 @@ int solution(int n, vector<vector<int> > costs) {
     sort(costs.begin(), costs.end(), cmp);
 
     for(int i = 0 ; i < costs.size() ; ++i) {
-        //cout <<costs[i][0]<<costs[i][1]<<costs[i][2]<<"\n";
         if(!isCycle(costs[i][0],costs[i][1])) {
             answer += costs[i][2];
             unionParent(costs[i][0],costs[i][1]);
