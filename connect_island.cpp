@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <iostream>
 using namespace std;
-int parent[100];
+vector<int> parent;
 
 bool cmp(vector<int> edge1, vector<int> edge2) {
     return edge1[2] < edge2[2];
@@ -16,9 +16,9 @@ int getParent(int node) {
         return getParent(parent[node]);
 }
 
-bool isCycle(vector<int> edge) {
-    int parent1 = getParent(edge[0]);
-    int parent2 = getParent(edge[1]);
+bool isCycle(int node1, int node2) {
+    int parent1 = getParent(node1);
+    int parent2 = getParent(node2);
     if(parent1 == parent2)
         return true;
     else
@@ -38,13 +38,13 @@ int solution(int n, vector<vector<int> > costs) {
     int answer = 0;
     //initialize parent node
     for(int i = 0 ; i < n ; ++i) {
-        parent[i] = i;
+        parent.push_back(i);
     }
     sort(costs.begin(), costs.end(), cmp);
 
-    for(int i = 0 ; i < n ; ++i) {
+    for(int i = 0 ; i < costs.size() ; ++i) {
         //cout <<costs[i][0]<<costs[i][1]<<costs[i][2]<<"\n";
-        if(!isCycle(costs[i])) {
+        if(!isCycle(costs[i][0],costs[i][1])) {
             answer += costs[i][2];
             unionParent(costs[i][0],costs[i][1]);
         }
