@@ -23,18 +23,25 @@ void solution(string input) {
             }
             else if(input[i] == ',' || input[i] == ';') {
                 cout << opBase;
-                int len = opEach.length();
-                for(int i = 0 ; i < len; ++i) {
+                while(!opEach.empty()) {
                     char c = opEach.back();
-                    cout<<c;
-                    opEach.pop_back();
+                    if(c == ']') {
+                        opEach.pop_back();
+                    }
+                    else if(c == '['){
+                        cout<<c<<']';
+                        opEach.pop_back();
+                    }
+                    else {
+                        cout<<c;
+                        opEach.pop_back();
+                    }
                 }
                 cout<<' '<< val << ";\n" ;
                 val = "";
                 opEach = "";
             }
             else if(input[i] != ' '){
-                cout<<input[i]<<'\n';
                 opEach.push_back(input[i]);
             }
         }
@@ -46,5 +53,5 @@ int main() {
     string input;
     getline(cin,input);
     solution(input);
-    return 1;
+    return 0;
 }
