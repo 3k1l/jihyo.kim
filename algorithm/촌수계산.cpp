@@ -1,37 +1,46 @@
 #include <iostream>
+#include <queue>
+#include <vector>
 
 using namespace std;
-int parent[100];
-int solution(int peopleNum, int num1, int num2, int relationCount, pair<int, int> relations[100]) {
-    //tree 구조로 추가
-    int result = -1;
-    if(getRoot(num1) == getRoot(num2)) {
-        //
-    }
-    else
-        return -1;
-}
+vector<int> relations[101];
+bool visited[101] = {false};
+int distanceNum[101] = {0};
 
-int getRoot(int child) {
-    if(parent[child] == child)
-        return child;
-    else
-        return getRoot(parent[child]);
+int solution(int peopleNum, int num1, int num2, int relationCount) {
+    queue<int> findQ;
+    int countNum = 1;
+    int num, answer;
+    findQ.push(num1);
+    answer = -1;
+    while(!findQ.empty()) {
+        num = findQ.front();
+        findQ.pop();
+        countNum = distanceNum[num]+1;
+        visited[num] = true;
+        if(num == num2) {
+            answer = distanceNum[num];
+            break;
+        }
+        for(int i = 0 ; i < relations[num].size(); ++i) {
+            if(!visited[relations[num][i]]) {
+                findQ.push(relations[num][i]);
+                distanceNum[relations[num][i]] = countNum;
+            }   
+        }
+    }
+    return answer;
 }
 
 int main() {
     int peopleNum, num1, num2, relationCount, parentNum, childNum;
-    pair<int ,int> relations[100];
-    scanf("%d %d %d %d", &peopleNum, &num1, &num2, &relationCount);
-
-    for(int i = 0  ; i < 100 ; i++)
-        parent[i] = i;
+    cin >> peopleNum >> num1 >> num2 >> relationCount;
 
     for(int i = 0 ; i < relationCount ; ++i) {
-        scanf("%d %d", &parentNum, &childNum);
-        relations[i] = make_pair(parentNum, childNum);
-        parent[childNum] = parentNum;
+        cin >> parentNum >> childNum;
+        relations[parentNum].push_back(childNum);
+        relations[childNum].push_back(parentNum);
     }
-    printf("%d\n", solution(peopleNum, num1, num2, relationCount, relations));
+    printf("%d\n", solution(peopleNum, num1, num2, relationCount));
     return 0;
 }
