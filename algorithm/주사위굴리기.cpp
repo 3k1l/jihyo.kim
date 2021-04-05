@@ -1,10 +1,13 @@
 #include <iostream>
 #include <vector>
-
+#include <cstdio>
 using namespace std;
 
 enum direction {
-    EAST, WEST, NORTH, SOUTH
+    EAST = 1,
+    WEST, 
+    NORTH, 
+    SOUTH
 };
 enum side{
     TOP, FRONT ,BOTTOM, BACK, LEFT, RIGHT
@@ -12,8 +15,8 @@ enum side{
 int main() {
     int row, col, x, y, num, directionNum;
     scanf("%d %d %d %d %d", &row, &col, &x, &y, &num);
-    int boards[20][20];
-    vector<int> dice(6);
+    int boards[21][21];
+    vector<int> dice(6, 0);
     for(int i = 0; i < row ; ++i) {
         for(int j = 0 ; j < col ; ++j) {
             scanf("%d", &boards[i][j]);
@@ -30,13 +33,13 @@ int main() {
             else {
                 //copy board to dice
                 dice[BOTTOM] = boards[x][y];
+                boards[x][y] = 0;
             }
             //update coordinate
             //East ++y
             ++y;
             if(y >= col) {
                 --y;
-                cout<<directionNum<<" x : "<<x<<" y : "<<y <<"\n";
                 continue;
             }
             else {
@@ -44,7 +47,7 @@ int main() {
                 swap(dice[TOP], dice[LEFT]);
                 swap(dice[BOTTOM], dice[RIGHT]);
                 swap(dice[LEFT], dice[RIGHT]);
-                cout<<dice[TOP]<<"\n";
+                printf("%d\n",dice[TOP]);
             }
         }
         else if(directionNum == WEST) {
@@ -55,12 +58,12 @@ int main() {
             else {
                 //copy board to dice
                 dice[BOTTOM] = boards[x][y];
+                boards[x][y] = 0;
             }
             //update coordinate
             --y;
             if(y < 0) {
                 ++y;
-                cout<<directionNum<<" x : "<<x<<" y : "<<y <<"\n";
                 continue;
             }
             else {
@@ -68,7 +71,7 @@ int main() {
                 swap(dice[TOP], dice[RIGHT]);
                 swap(dice[BOTTOM], dice[LEFT]);
                 swap(dice[LEFT], dice[RIGHT]);
-                cout<<dice[TOP]<<"\n";
+                printf("%d\n",dice[TOP]);
             }
         }
         else if(directionNum == NORTH) {
@@ -79,12 +82,12 @@ int main() {
             else {
                 //copy board to dice
                 dice[BOTTOM] = boards[x][y];
+                boards[x][y] = 0;
             }
             //update coordinate
             --x;
             if(x < 0) {
                 ++x;
-                cout<<directionNum<<" x : "<<x<<" y : "<<y <<"\n";
                 continue;
             }
             else {
@@ -92,7 +95,7 @@ int main() {
                 swap(dice[TOP], dice[FRONT]);
                 swap(dice[FRONT], dice[BOTTOM]);
                 swap(dice[BOTTOM], dice[BACK]);
-                cout<<dice[TOP]<<"\n";
+                printf("%d\n",dice[TOP]);
             }
         }
         else if(directionNum == SOUTH) {
@@ -103,12 +106,12 @@ int main() {
             else {
                 //copy board to dice
                 dice[BOTTOM] = boards[x][y];
+                boards[x][y] = 0;
             }
             //update coordinate
             ++x;
             if(x >= row) {
                 --x;
-                cout<<directionNum<<" x : "<<x<<" y : "<<y <<"\n";
                 continue;
             }
             else {
@@ -116,7 +119,7 @@ int main() {
                 swap(dice[TOP], dice[BACK]);
                 swap(dice[BACK], dice[BOTTOM]);
                 swap(dice[BOTTOM], dice[FRONT]);
-                cout<<dice[TOP]<<"\n";
+                printf("%d\n",dice[TOP]);
             }
         }   
     }
