@@ -6,81 +6,54 @@
 using namespace std;
 
 int answer = 500001;
-int subinsLocation[500001] = {500001};
 int visited[500001][2];
-/*
-int cacl(int location_subin, int second) {
-    int curSubin = location_subin;
-    for(int i = 0 ; i <= second ; ++i)
-        curSubin += i;
-    return curSubin;
-}
-*/
-void go(int location_sister,int location_subin, int second) {
+
+void go(int location_sister,int location_subin ) {
     queue<pair<int, int> > q;
-    q.push(make_pair(location_sister, second));
+    q.push(make_pair(location_sister, 0));
     int curSister, curSecond, curSubin;
+    visited[location_sister][0] = true;
     while(!q.empty()) {
         curSister = q.front().first;
         curSecond = q.front().second;
-        //curSubin =  cacl(location_subin, curSecond);
-        curSubin =  subinsLocation[curSecond];
+        curSubin =  location_subin + curSecond*(curSecond+1)/2;
         q.pop();
-        if(visited[curSister][curSecond%2] != -1)
-            continue;
-        visited[curSister][curSecond%2] = curSecond;
-        cout<<curSister<<" "<<curSubin<<" "<<curSecond<<endl;
         if(curSubin > 500000) {
-            continue;
+            break;
         }
-        if(curSister == curSubin) {
-            cout<<curSecond<<endl;
+        if(curSister == curSubin || visited[curSubin][curSecond%2]) {
             answer = min(answer, curSecond);
-            continue;
+            break;
         }
-        if(answer <= curSecond) {
-            continue;
-        }
-        //add next
+        int nextSecond = curSecond +1;
         if(curSister > 0) {
-            //if(visited[curSister-1] == -1 || (visited[curSister-1] != -1 && visited[curSister-1] > curSecond+1)) {
+            if(!visited[curSister-1][nextSecond%2]) {
                 q.push(make_pair(curSister-1, curSecond+1));
-                //visited[curSister-1] = curSecond;
-            //}
+                visited[curSister-1][nextSecond%2] = true;
+            }
         }
         if(curSister < 500000) {
-            //if(visited[curSister+1] == -1 || (visited[curSister+1] != -1 && visited[curSister+1] > curSecond+1)) {
+            if(!visited[curSister+1][nextSecond%2]) {
                 q.push(make_pair(curSister+1, curSecond+1));
-                //visited[curSister+1] = curSecond;
-            //}
+                visited[curSister+1][nextSecond%2] = true;
+            }
         }
         if(curSister <= 250000) {
-            //if(visited[curSister*2] == -1 || (visited[curSister*2] != -1 && visited[curSister*2] > curSecond+1)) {
+            if(!visited[curSister*2][nextSecond%2]) {
                 q.push(make_pair(curSister*2, curSecond+1));
-                //visited[curSister*2] = curSecond;
-            //}
+                visited[curSister*2][nextSecond%2] = true;
+            }
         }
     }
 }
 
 int main() {
+
     int location_subin, location_sister;
-    int second = 0;
     scanf("%d %d", &location_sister, &location_subin);
     //go to find answer
-    
-    subinsLocation[0] = location_subin;
-    visited[0][0] = -1;
-    visited[0][1] = -1;
 
-    for(int i = 1 ; i < 500001 ; ++i) {
-        subinsLocation[i] = subinsLocation[i-1] + i;
-        visited[i][0] = -1;
-        visited[i][1] = -1;
-
-    }
-
-    go(location_sister, location_subin, second);
+    go(location_sister, location_subin);
 
     if(answer == 500001)
         answer = -1;
