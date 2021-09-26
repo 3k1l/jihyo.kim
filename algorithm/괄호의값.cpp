@@ -1,75 +1,55 @@
 #include <iostream>
 #include <stack>
+#include <string>
+#include <cstdlib>
 using namespace std;
 
-void solution(string input) {
+int solution(string input) {
     stack<char> inputS;
-    stack<int> valueS;
     int result = 0;
-    int val = 1;
-    char curChar;
-    bool INOUT = false;
-
+    int num = 1;
     for(int i = 0 ; i < input.length() ; ++i) {
-
-        if(inputS.empty()) {
-            //
-        }
-        else {
-            curChar = inputS.top();
-        }
-        
-        if(input[i] == '(' || input[i] == '[') {
-            inputS.push(input[i]);
-            if(curChar == '(' || curChar=='[') {
-                //INOUT = true;
-            }
-
-        }
-        else {
-            if(curChar == '(') {
-                if(input[i] == ')') {
+        switch(input[i]) {
+            case '(' :
+                num *= 2;
+                inputS.push(input[i]);
+                break;
+            case '[' :
+                num *= 3;
+                inputS.push(input[i]);
+                break;
+            case ')' :
+                if(inputS.empty() || inputS.top() != '(') {
+                    return 0;
+                }
+                else {
+                    if(input[i-1] == '(' )
+                        result += num;
                     inputS.pop();
-                    val *= 2;
-                    if(INOUT) {
-                        valueS.push(val);
-                        val = 1;
-                    }
-                    else {
-
-                    }
+                    num /= 2;
                 }
-                else if(input[i] == ']') {
-                    result = 0;
-                    break;
+                break;
+            case ']' :
+                if(inputS.empty() || inputS.top() != '[') {
+                    return 0;
                 }
-            }
-            else if (curChar == '[') {
-                if(input[i] == ']') {
+                else {
+                    if(input[i-1] == '[' )
+                        result += num;
                     inputS.pop();
-                    val *= 3;
-                    if(INOUT) {
-                        valueS.push(val);
-                        val = 1;
-                    }
-                    else {
-
-                    }
+                    num /= 3;
                 }
-                else if(input[i] == ')') {
-                    result = 0;
-                    break;
-                }
-
-            }
+                break;
+            break;
         }
     }
-    cout<<result<<'\n';
+   
+    return result;
 }
-
+//(2 9
 int main() {
     string input;
     getline(cin, input);
-    solution(input);
+    cout<<solution(input)<<'\n';
     return 0;
 }

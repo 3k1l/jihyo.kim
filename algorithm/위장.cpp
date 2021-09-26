@@ -4,7 +4,7 @@
 #define MAX_CLOTHES 30
 using namespace std;
 
-int solution(vector<vector<string>> clothes) {
+int solution(vector<vector<string> > clothes) {
     int answer = 1;
     unordered_map<string, int> catagory;
     for(int i = 0 ; i < clothes.size() ; ++i) {

@@ -28,10 +28,10 @@ bool compareMax(pair<string, int> a, pair<string, int> b) {
 }
 vector<int> solution(vector<string> genres, vector<int> plays) {
     vector<int> answer;
-    vector<pair<int, int>>sortedPlays;
-    unordered_map<string ,vector<int>> catagory;
+    vector<pair<int, int> >sortedPlays;
+    unordered_map<string ,vector<int> > catagory;
     unordered_map<string ,int> catagoryMax;
-    vector<pair<string,int>> sortMax;
+    vector<pair<string,int> > sortMax;
     int maxPlay = -1;
     
     for(int i = 0; i < plays.size() ; ++i) {

@@ -20,7 +20,7 @@ struct cmp {
     }
 };
 
-int solution(vector<vector<int>> jobs) {
+int solution(vector<vector<int> > jobs) {
     int answer = 0;
     int sum = 0;
     //sort the jobs with the start time
