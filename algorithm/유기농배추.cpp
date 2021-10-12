@@ -14,7 +14,7 @@ void bfs(int land[][MAX_NUM], bool visited[][MAX_NUM], int row, int col) {
     visited[row][col] = true;
     int x, y;
     pair<int, int> val;
-    while(!inputQ.empty()) {
+    while(!inputQ.empty()) { 
         val = inputQ.front();
         x = val.first;
         y = val.second;
